@@ -8,6 +8,7 @@
   "permissions": [
     "http://perldoc.jp/",
     "tabs",
+    "alarms",
     "notifications"
   ],
   "web_accessible_resources": [

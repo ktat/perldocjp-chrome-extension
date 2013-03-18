@@ -15,7 +15,12 @@ var now = (new Date).getTime();
 var notified = {};
 
 update_perldocjp_db();
-setInterval(update_perldocjp_db, 21600 * 1000);
+chrome.alarms.create('update_perldocjp_db', {"periodInMinutes": 360});
+chrome.alarms.onAlarm.addListener(function (al) {
+ if (al.name === 'update_perldocjp_db') {
+    update_perldocjp_db();
+ }
+});
 
 // chrome.browserAction.onClicked.addListener(to_perldocjp);
 chrome.pageAction.onClicked.addListener(to_perldocjp);
