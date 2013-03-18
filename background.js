@@ -114,7 +114,7 @@ function check_url (tab) {
 
   } else {
     // chrome.browserAction.setIcon({"path": "icon.ico"});
-    chrome.pageAction.hide();
+    chrome.pageAction.hide(tab.id);
   }
 }
 

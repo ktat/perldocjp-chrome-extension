@@ -9,7 +9,6 @@ function notification_saved () {
   var sec = document.querySelector('#notification_second').value;
   perldocjp_setting.notification = sec;
   localStorage.perldocjp_setting = JSON.stringify(perldocjp_setting);
-  console.log(perldocjp_setting);
   document.querySelector('#slider_number').innerHTML = sec;
 }
 
