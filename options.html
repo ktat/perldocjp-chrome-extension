@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>Perldoc.jp Chrome Extension Options</title>
+</head>
+<body>
+<h1>Perldc.jp Chrome Extension Options</h1>
+<p>
+search.cpan.org や metacpan.org で翻訳済みのモジュールが見つかった場合、<br />
+アドレスバーに <img src="perldocjp.png" style="width:16px"/> が表示されます。クリックすると翻訳ページを新しいタブに開きます。
+</p>
+<input type="checkbox" id="auto_open">翻訳が見付かった場合に、自動的にPerldoc.jpの翻訳ページを開く<br />
+デスクトップ通知を表示する秒数 (0秒で通知を非表示)<br />
+<input id="notification_second" type="range" min=0 max=30 /><span id="slider_number"></span>秒
+<br /><br />
+<input type="button" id="reload" value="拡張のリロード" />
+<script src="options.js"></script>
+</body>
+</html>

@@ -7,12 +7,20 @@
 
   "permissions": [
     "http://perldoc.jp/",
-    "tabs"
+    "tabs",
+    "notifications"
   ],
-  "browser_action": {
-    "default_icon": "icon.ico"
+  "web_accessible_resources": [
+    "icon.ico"
+  ],
+//  "browser_action": {
+//    "default_icon": "icon.ico"
 //    "default_popup": "popup.html"
+//  },
+  "page_action": {
+    "default_icon": "perldocjp.png"
   },
+  "options_page": "options.html",
    "background": {
     "scripts" : ["background.js"]
   }
