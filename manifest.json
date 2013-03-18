@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+
+  "name": "Perldoc.jp",
+  "description": "Notify when document is translated in perldoc.jp",
+  "version": "1.0",
+
+  "permissions": [
+    "http://perldoc.jp/",
+    "tabs"
+  ],
+  "browser_action": {
+    "default_icon": "icon.ico"
+//    "default_popup": "popup.html"
+  },
+   "background": {
+    "scripts" : ["background.js"]
+  }
+}
