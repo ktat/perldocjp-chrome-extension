@@ -49,7 +49,12 @@ function update_perldocjp_db () {
 }
 
 function get_perldocjp_url (tab) {
-  if(tab.url.match(/^https?:\/\/(?:search\.|meta)cpan\.org\/search(\?.+)/)) {
+  if(tab.url.match(/^https?:\/\/perldoc\.perl\.org\/search\.html\?q=(.+)/)) {
+    var q = RegExp.$1;
+    return get_module_path(q.replace(/\%3A/gi, ':'));
+  } else if(tab.url.match(/^https?:\/\/perldoc\.perl\.org\/.+/)) {
+    return get_module_path(tab.title);
+  } else if(tab.url.match(/^https?:\/\/(?:search\.|meta)cpan\.org\/search(\?.+)/)) {
     var q = RegExp.$1;
     if (q.match(/(?:&|\?)q=([^&]+)/) || q.match(/(?:&|\?)query=([^&]+)/)) {
       q = RegExp.$1;
