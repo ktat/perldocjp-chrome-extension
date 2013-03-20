@@ -83,8 +83,12 @@ function get_doc_name (tab) {
     if (tab.title.match(/^([\w:]+)/)) {
       doc_name = RegExp.$1;
     } else {
-      doc_name = path.replace(/^.+\/(?:lib|pod)\/(.+)\.pod$/, "$1");
-      if (! path.match('/' + new_path + '-')) {
+      if (! path.replace(/^module\/\w+\/(.+)\.pod$/)) {
+	doc_name = RegExp.$1;
+      } else if (path.match(/^.+\/(?:lib|pod)\/(.+)\.pod$/)) {
+	doc_name = RegExp.$1;
+      }
+      if (! path.match('/' + doc_name + '-') && ! doc_name.match('/')) {
         // like https://metacpan.org/module/GIULIENK/Audio-Beep-0.11/Beep.pod
         // doc_name is 'Beep'
         if (path.match(/module\/\w+\/([\w-]+)-[\d\.]+\//)) {
@@ -95,7 +99,7 @@ function get_doc_name (tab) {
     }
   }
   if (doc_name.match(/^([\w:]+)/)) {
-    return doc_name;
+    return RegExp.$1;
   }
 }
 
