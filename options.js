@@ -5,11 +5,22 @@ function auto_open_saved () {
   localStorage.perldocjp_setting = JSON.stringify(perldocjp_setting);
 }
 
-function notification_saved () {
+function notification_second_saved () {
   var sec = document.querySelector('#notification_second').value;
-  perldocjp_setting.notification = sec;
+  perldocjp_setting.notification_second = sec;
   localStorage.perldocjp_setting = JSON.stringify(perldocjp_setting);
   document.querySelector('#slider_number').innerHTML = sec;
+}
+
+function notification_saved () {
+  var browser = document.querySelector('#browser_notification');
+  var desktop = document.querySelector('#desktop_notification');
+  if (browser.checked) {
+    perldocjp_setting.notification_type = 'browser';
+  }else  if (desktop.checked) {
+    perldocjp_setting.notification_type = 'desktop';
+  }
+  localStorage.perldocjp_setting = JSON.stringify(perldocjp_setting);
 }
 
 function reload_extension () {
@@ -17,12 +28,20 @@ function reload_extension () {
 }
 
 if (perldocjp_setting.auto_open === 1) {
-  document.getElementById('auto_open').checked = true;
+  document.querySelector('#auto_open').checked = true;
 }
 
-document.querySelector('#notification_second').value = perldocjp_setting.notification || 5;
-document.querySelector('#slider_number').innerHTML = perldocjp_setting.notification || 5;
+if (perldocjp_setting.notification_type === 'browser') {
+  document.querySelector('#browser_notification').checked = true;
+} else if (perldocjp_setting.notification_type === 'desktop') {
+  document.querySelector('#desktop_notification').checked = true;
+}
+
+document.querySelector('#notification_second').value = perldocjp_setting.notification_second || 5;
+document.querySelector('#slider_number').innerHTML   = perldocjp_setting.notification_second || 5;
 
 document.querySelector('#auto_open').addEventListener('click', auto_open_saved);
-document.querySelector('#notification_second').addEventListener('change', notification_saved);
+document.querySelector('#notification_second').addEventListener('change', notification_second_saved);
+document.querySelector('#desktop_notification').addEventListener('click', notification_saved);
+document.querySelector('#browser_notification').addEventListener('click', notification_saved);
 document.querySelector('#reload').addEventListener('click', reload_extension);

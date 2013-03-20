@@ -1,18 +1,17 @@
+if (! localStorage.perldocjp_setting) {
+  init_localStorage();
+}
+
 if (! localStorage.perldocjp_installed) {
-  chrome.runtime.onInstalled.addListener(function (o) {
+  chrome.runtime.onInstalled.addListener(function () {
     localStorage.perldocjp_installed = true;
     chrome.tabs.create({"url": "options.html"});
   });
 }
 
-var perldocjp_db = {};
-var got_time = localStorage.perldocjp_got_time || 0;
-if (! localStorage.perldocjp_setting) {
-  localStorage.perldocjp_setting = JSON.stringify({ "notification": 5, "auto_open": 0 });
-}
 var perldocjp_setting = JSON.parse(localStorage.perldocjp_setting);
-var now = (new Date).getTime();
 var notified = {};
+var perldocjp_db = {};
 
 update_perldocjp_db();
 chrome.alarms.create('update_perldocjp_db', {"periodInMinutes": 360});
@@ -35,8 +34,17 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeinfo, tag) {
   }
 });
 
+////////////////////
+// fucntions
+////////////////////
+
+function init_localStorage () {
+  localStorage.clear();
+  localStorage.perldocjp_setting = JSON.stringify({ "notification_second": 5, "auto_open": 0, "notification_type": false });
+}
+
 function update_perldocjp_db () {
-  localStorage.perldocjp_got_time = now;
+  var now = (new Date).getTime();
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "http://perldoc.jp/static/docs.json?time=" + now, true);
   xhr.onreadystatechange = function() {
@@ -50,6 +58,8 @@ function update_perldocjp_db () {
 
 function get_doc_name (tab) {
   var doc_name = '';
+  if (! tab)  return;
+
   if(tab.url.match(/^https?:\/\/perldoc\.perl\.org\/search\.html\?q=(.+)/)) {
     var q = RegExp.$1;
     doc_name = q.replace(/\%3A/gi, ':');
@@ -90,7 +100,7 @@ function get_doc_name (tab) {
 }
 
 function get_perldocjp_url (doc_name) {
-  if (doc_name.match(/^([\w:]+)/)) {
+  if (doc_name && doc_name.match(/^([\w:]+)/)) {
     var module = RegExp.$1;
     var perldocjp_path = perldocjp_db[module];
     if (perldocjp_path) {
@@ -114,23 +124,37 @@ function check_url (tab) {
        })
     }
 
-    // if (perldocjp_setting.popup > 0) {
-    //   chrome.tabs.executeScript(tab.id, {"file": "inject.js"});
-    // }
+    if (! notified[perldocjp_url] && perldocjp_setting.notification_second > 0) {
+      notified[perldocjp_url] = 1;
 
-    if (perldocjp_setting.notification > 0) {
-      if (! notified[perldocjp_url]) {
-        notified[perldocjp_url] = 1;
-        var notification = webkitNotifications.createNotification(
-          'http://perldoc.jp/favicon.ico',
-          'perldoc.jp', 
-          doc_name + 'は翻訳があります'
+      if (perldocjp_setting.notification_type === 'browser') {
+	chrome.tabs.insertCSS(tab.id, {"file": "inject.css"});
+	chrome.tabs.executeScript(tab.id, {"file": "pre_inject.js"});
+
+        // wating before injection excuted
+	window.setTimeout( function () {
+	  var inject_code =
+	    'document.querySelector("#pjp_doc_name").innerTEXT = "' + doc_name + '";' +
+	    'document.querySelector("#pjp_url").innerTEXT = "' + perldocjp_url + '";' +
+	    'document.querySelector("#pjp_timeout").innerTEXT = "' + perldocjp_setting.notification_second + '";'
+	    ;
+          chrome.tabs.executeScript(tab.id, {"code": inject_code});
+	}, 5);
+
+        // wating before injection excuted
+	window.setTimeout( function () {
+	  chrome.tabs.executeScript(tab.id, {"file": "inject.js"});
+	}, 10);
+      } else if (perldocjp_setting.notification_type === 'desktop') {
+	var notification = webkitNotifications.createNotification(
+            'http://perldoc.jp/favicon.ico',
+            'perldoc.jp', 
+            doc_name + 'は翻訳があります'
         );
-        notification.show();
-        setTimeout(function () { notification.cancel() }, perldocjp_setting.notification * 1000);
+	notification.show();
+	setTimeout(function () { notification.cancel() }, perldocjp_setting.notification_second * 1000);
       }
     }
-
   } else {
     // chrome.browserAction.setIcon({"path": "icon.ico"});
     chrome.pageAction.hide(tab.id);
@@ -139,7 +163,7 @@ function check_url (tab) {
 
 function to_perldocjp (tab) {
   var doc = get_doc_name(tab);
-  var url = get_perlodcjp_url(doc);
+  var url = get_perldocjp_url(doc);
   if (url) {
     chrome.tabs.create({"url": url});
   } else {

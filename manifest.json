@@ -7,6 +7,12 @@
 
   "permissions": [
     "http://perldoc.jp/",
+    "http://perldoc.perl.org/",
+    "https://perldoc.perl.org/",
+    "http://search.cpan.org/",
+    "https://search.cpan.org/",
+    "http://metacpan.org/",
+    "https://metacpan.org/",
     "tabs",
     "alarms",
     "notifications"
