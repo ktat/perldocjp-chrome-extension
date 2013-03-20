@@ -2,8 +2,8 @@
   "manifest_version": 2,
 
   "name": "Perldoc.jp 翻訳通知",
-  "description": "search.cpan.org、metacpan.org、perldoc.perl.orgで表示しているドキュメントが、perldoc.jpで翻訳されている時に通知します。",
-  "version": "0.1",
+  "description": "search.cpan.org、metacpan.org、perldoc.perl.orgで表示しているドキュメントがperldoc.jpで翻訳されている時に通知します。",
+  "version": "0.2",
   "permissions": [
     "http://perldoc.jp/",
     "http://perldoc.perl.org/",
