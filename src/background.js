@@ -40,7 +40,12 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeinfo, tag) {
 
 function init_localStorage () {
   localStorage.clear();
-  localStorage.perldocjp_setting = JSON.stringify({ "notification_second": 3, "auto_open": 0, "notification_type": 'browser', "notification_everytime": true });
+  localStorage.perldocjp_setting = JSON.stringify({
+                                                      "notification_second": 3,
+                                                      "auto_open"          : 0,
+                                                      "notification_type"  : 'browser',
+                                                      "notification_everytime": true
+                                                  });
 }
 
 function update_perldocjp_db () {
@@ -84,16 +89,16 @@ function get_doc_name (tab) {
       doc_name = RegExp.$1;
     } else {
       if (path.match(/^module\/\w+\/[\w\-]+\/(.+)\.pod$/)) {
-	doc_name = RegExp.$1;
+        doc_name = RegExp.$1;
       } else if (path.match(/^.+\/(?:lib|pod)\/(.+)\.pod$/)) {
-	doc_name = RegExp.$1;
+        doc_name = RegExp.$1;
       }
       if (! path.match('/' + doc_name + '-') && ! doc_name.match('/')) {
         // like https://metacpan.org/module/GIULIENK/Audio-Beep-0.11/Beep.pod
         // doc_name is 'Beep'
         if (path.match(/module\/\w+\/([\w-]+)-[\d\.]+\//)) {
-	  doc_name = RegExp.$1;
-	}
+          doc_name = RegExp.$1;
+        }
       }
       doc_name = doc_name.replace(/[\/\-]/g, '::');
     }
@@ -132,31 +137,31 @@ function check_url (tab) {
       notified[perldocjp_url] = 1;
 
       if (perldocjp_setting.notification_type === 'browser') {
-	chrome.tabs.insertCSS(tab.id, {"file": "inject.css"});
-	chrome.tabs.executeScript(tab.id, {"file": "pre_inject.js"});
+        chrome.tabs.insertCSS(tab.id, {"file": "inject.css"});
+        chrome.tabs.executeScript(tab.id, {"file": "pre_inject.js"});
 
-        // wating before injection excuted
-	window.setTimeout( function () {
-	  var inject_code =
-	    'document.querySelector("#pjp_doc_name").innerTEXT = "' + doc_name + '";' +
-	    'document.querySelector("#pjp_url").innerTEXT = "' + perldocjp_url + '";' +
-	    'document.querySelector("#pjp_timeout").innerTEXT = "' + perldocjp_setting.notification_second + '";'
-	    ;
+        // wating for pre_inject.js
+        window.setTimeout( function () {
+          var inject_code =
+            'document.querySelector("#pjp_doc_name").innerTEXT = "' + doc_name + '";' +
+            'document.querySelector("#pjp_url").innerTEXT = "' + perldocjp_url + '";' +
+            'document.querySelector("#pjp_timeout").innerTEXT = "' + perldocjp_setting.notification_second + '";'
+            ;
           chrome.tabs.executeScript(tab.id, {"code": inject_code});
-	}, 5);
+        }, 5);
 
-        // wating before injection excuted
-	window.setTimeout( function () {
-	  chrome.tabs.executeScript(tab.id, {"file": "inject.js"});
-	}, 10);
+        // wating for inject_code
+        window.setTimeout( function () {
+          chrome.tabs.executeScript(tab.id, {"file": "inject.js"});
+        }, 10);
       } else if (perldocjp_setting.notification_type === 'desktop') {
-	var notification = webkitNotifications.createNotification(
+        var notification = webkitNotifications.createNotification(
             'http://perldoc.jp/favicon.ico',
             'perldoc.jp', 
             doc_name + 'は翻訳があります'
         );
-	notification.show();
-	setTimeout(function () { notification.cancel() }, perldocjp_setting.notification_second * 1000);
+        notification.show();
+        setTimeout(function () { notification.cancel() }, perldocjp_setting.notification_second * 1000);
       }
     }
   } else {
