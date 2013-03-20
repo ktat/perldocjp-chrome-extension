@@ -1,10 +1,9 @@
 {
   "manifest_version": 2,
 
-  "name": "Perldoc.jp",
-  "description": "Notify when document is translated in perldoc.jp",
-  "version": "1.0",
-
+  "name": "Perldoc.jp 翻訳通知",
+  "description": "search.cpan.org、metacpan.org、perldoc.perl.orgで表示しているドキュメントが、perldoc.jpで翻訳されている時に通知します。",
+  "version": "0.1",
   "permissions": [
     "http://perldoc.jp/",
     "http://perldoc.perl.org/",
@@ -20,10 +19,6 @@
   "web_accessible_resources": [
     "icon.ico"
   ],
-//  "browser_action": {
-//    "default_icon": "icon.ico"
-//    "default_popup": "popup.html"
-//  },
   "page_action": {
     "default_icon": "perldocjp.png"
   },
