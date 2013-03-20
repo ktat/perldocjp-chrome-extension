@@ -83,7 +83,7 @@ function get_doc_name (tab) {
     if (tab.title.match(/^([\w:]+)/)) {
       doc_name = RegExp.$1;
     } else {
-      if (! path.replace(/^module\/\w+\/(.+)\.pod$/)) {
+      if (path.match(/^module\/\w+\/[\w\-]+\/(.+)\.pod$/)) {
 	doc_name = RegExp.$1;
       } else if (path.match(/^.+\/(?:lib|pod)\/(.+)\.pod$/)) {
 	doc_name = RegExp.$1;
