@@ -40,7 +40,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeinfo, tag) {
 
 function init_localStorage () {
   localStorage.clear();
-  localStorage.perldocjp_setting = JSON.stringify({ "notification_second": 5, "auto_open": 0, "notification_type": false });
+  localStorage.perldocjp_setting = JSON.stringify({ "notification_second": 3, "auto_open": 0, "notification_type": 'browser', "notification_everytime": true });
 }
 
 function update_perldocjp_db () {
@@ -116,7 +116,7 @@ function check_url (tab) {
     // chrome.browserAction.setIcon({"path": "perldocjp.ico", "tabId": tab.id});
     chrome.pageAction.show(tab.id);
 
-    if (perldocjp_setting.auto_open === 1) {
+    if (perldocjp_setting.auto_open) {
        chrome.tabs.query({"url": perldocjp_url}, function (t) {
           if (t.length === 0) {
             chrome.tabs.create({"url": perldocjp_url, "active": false});
@@ -124,7 +124,7 @@ function check_url (tab) {
        })
     }
 
-    if (! notified[perldocjp_url] && perldocjp_setting.notification_second > 0) {
+    if ((perldocjp_setting.notification_everytime || ! notified[perldocjp_url]) && perldocjp_setting.notification_second > 0) {
       notified[perldocjp_url] = 1;
 
       if (perldocjp_setting.notification_type === 'browser') {

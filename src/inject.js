@@ -10,7 +10,7 @@ if (pjp_timeout) {
 
 var pjp_link = document.createElement("a");
 pjp_link.href      = pjp_url;
-pjp_link.target    = "blank";
+pjp_link.target    = "_blank";
 pjp_link.innerHTML = pjp_doc_name + ' の翻訳へ';
 
 var pjp_info = document.querySelector("#perldocjp_notification");

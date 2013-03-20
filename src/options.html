@@ -16,15 +16,16 @@ font-size:1.2em;
 search.cpan.org や metacpan.org で翻訳済みのモジュールが見つかった場合、<br />
 アドレスバーに <img src="perldocjp.png" style="width:16px"/> が表示されます。クリックすると翻訳ページを新しいタブに開きます。
 </p>
-<h2>翻訳の自動表示</h2>
-<input type="checkbox" id="auto_open">自動的にPerldoc.jpの翻訳ページを開く<br />
-<h2>通知方法の設定</h2>
+<h2>通知方法</h2>
 <input type="radio" id="browser_notification" name="notification_type" value=1 />ポップアップ通知
-<input type="radio" id="desktop_notification" name="notification_type" value=2 />デスクトップ通知
+<input type="radio" id="desktop_notification" name="notification_type" value=2 />デスクトップ通知<br />
+<input type="checkbox" id="notification_everytime" name="notification_everytime" value=1 />毎回表示する
 <br />通知を表示する秒数 (0秒で通知を非表示)<br />
 <input id="notification_second" type="range" min=0 max=30 /><span id="slider_number"></span>秒
 <br /><br />
 <input type="button" id="reload" value="拡張をリロードして設定を反映" />
 <script src="options.js"></script>
+<h2>翻訳の自動表示</h2>
+<input type="checkbox" id="auto_open">自動的にPerldoc.jpの翻訳ページを開く<br />
 </body>
 </html>
