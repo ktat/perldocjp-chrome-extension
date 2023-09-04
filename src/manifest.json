@@ -1,29 +1,29 @@
 {
-  "manifest_version": 2,
+    "manifest_version": 3,
 
-  "name": "Perldoc.jp 翻訳通知",
-  "description": "search.cpan.org、metacpan.org、perldoc.perl.orgで表示しているドキュメントがperldoc.jpで翻訳されている時に通知します。",
-  "version": "0.2",
-  "permissions": [
-    "http://perldoc.jp/",
-    "http://perldoc.perl.org/",
-    "https://perldoc.perl.org/",
-    "http://search.cpan.org/",
-    "https://search.cpan.org/",
-    "http://metacpan.org/",
-    "https://metacpan.org/",
-    "tabs",
-    "alarms",
-    "notifications"
-  ],
-  "web_accessible_resources": [
-    "icon.ico"
-  ],
-  "page_action": {
-    "default_icon": "perldocjp.png"
-  },
-  "options_page": "options.html",
-   "background": {
-    "scripts" : ["background.js"]
-  }
+    "name": "Perldoc.jp 翻訳通知",
+    "description": "search.cpan.org、metacpan.org、perldoc.perl.orgで表示しているドキュメントがperldoc.jpで翻訳されている時に通知します。",
+    "version": "0.3",
+    "permissions": [
+	"tabs",
+	"alarms",
+	"notifications",
+	"storage",
+	"scripting",
+	"webRequest"
+    ],
+    "host_permissions": [
+	"*://perldoc.jp/*",
+	"*://perldoc.perl.org/*",
+	"*://metacpan.org/*",
+	"*://perl5.git.perl.org"
+    ],
+    "action": {
+	"default_icon": "perldocjp.png"
+    },
+    "options_page": "options.html",
+    "background": {
+	"service_worker" : "background.js",
+	"type": "module"
+    }
 }
