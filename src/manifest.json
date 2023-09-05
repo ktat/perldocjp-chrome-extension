@@ -15,8 +15,7 @@
     "host_permissions": [
 	"*://perldoc.jp/*",
 	"*://perldoc.perl.org/*",
-	"*://metacpan.org/*",
-	"*://perl5.git.perl.org"
+	"*://metacpan.org/*"
     ],
     "action": {
 	"default_icon": "perldocjp.png"
