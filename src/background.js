@@ -1,20 +1,20 @@
 let perldocjp_setting;
 
-// load perldocjp extension setting
-chrome.storage.local.get(['perldocjp_setting'], (result) => {
-  if (!result) {
-    init_storage();
-  } else {
-    perldocjp_setting = JSON.parse(result.perldocjp_setting);
-  }
-});
-
 // open options when first install
 chrome.storage.local.get(['perldocjp_installed'], (v) => {
   if (!v.perldocjp_installed) {
+    init_storage();
     chrome.runtime.onInstalled.addListener(function () {
-      chrome.storage.local.set({"perldocjp_installed": true});
       chrome.tabs.create({"url": "options.html"});
+    });
+  } else {
+    // load perldocjp extension setting
+    chrome.storage.local.get(['perldocjp_setting'], (result) => {
+      if (!result || !result.perldocjp_setting) {
+	init_setting();
+      } else {
+	perldocjp_setting = JSON.parse(result.perldocjp_setting);
+      }
     });
   }
 });
@@ -38,6 +38,7 @@ update_perldocjp_db();
 
 // open perldoc.jp when extension icon is clicked
 chrome.action.onClicked.addListener(to_perldocjp);
+
 
 // check tab URL
 chrome.tabs.onActivated.addListener(function (activeinfo) {
@@ -63,7 +64,13 @@ chrome.notifications.onClicked.addListener(
 
 function init_storage () {
   chrome.storage.local.clear();
-  chrome.storage.local.set({'perldocjp_setting': JSON.stringify({ "notification_second": 3, "auto_open": 0, "notification_type": 'browser', "notification_everytime": true })});
+  chrome.storage.local.set({"perldocjp_installed": true});
+  init_setting();
+}
+
+function init_setting () {
+  perldocjp_setting = { "notification_second": 3, "auto_open": 0, "notification_type": 'browser', "notification_everytime": true };
+  chrome.storage.local.set({'perldocjp_setting': JSON.stringify(perldocjp_setting)});
 }
 
 async function update_perldocjp_db () {
@@ -132,8 +139,13 @@ function get_perldocjp_url (doc_name) {
 async function check_url (tab) {
   const doc_name = get_doc_name(tab);
   const perldocjp_url = get_perldocjp_url(doc_name);
+
+  if (!perldocjp_setting) {
+    init_setting();
+  }
+
   if (perldocjp_url) {
-    chrome.action.enable(tab.id);
+    chrome.action.setIcon({path: "perldocjp.png"});
 
     if (perldocjp_setting.auto_open) {
       chrome.tabs.query({"url": perldocjp_url}, function (t) {
@@ -172,7 +184,7 @@ async function check_url (tab) {
       }
     }
   } else {
-    chrome.action.disable(tab.id);
+    chrome.action.setIcon({path: "perldocjp-off.icon.png"});
   }
 }
 
@@ -182,6 +194,6 @@ function to_perldocjp (tab) {
   if (url) {
     chrome.tabs.create({"url": url});
   } else {
-    chrome.tabs.create({url: 'http://perldoc.jp/'})
+    chrome.tabs.create({url: 'https://perldoc.jp/'})
   }
 }
