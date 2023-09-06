@@ -3,7 +3,7 @@
 
     "name": "Perldoc.jp 翻訳通知",
     "description": "metacpan.org、perldoc.perl.orgで表示しているドキュメントがperldoc.jpで翻訳されている時に通知します。",
-    "version": "0.3",
+    "version": "0.4",
     "permissions": [
 	"tabs",
 	"alarms",
